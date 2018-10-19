@@ -28,6 +28,8 @@ char *color(const char *colorstr) {
         (void)snprintf(colorbuf, sizeof(colorbuf), "<fc=%s>", cfg_getstr(cfg_general, colorstr));
     else if (output_format == O_LEMONBAR)
         (void)snprintf(colorbuf, sizeof(colorbuf), "%%{F%s}", cfg_getstr(cfg_general, colorstr));
+    else if (output_format == O_PANGO)
+        (void)snprintf(colorbuf, sizeof(colorbuf), "<span fgcolor='%s'>", cfg_getstr(cfg_general, colorstr));
     else if (output_format == O_TERM) {
         /* The escape-sequence for color is <CSI><col>;1m (bright/bold
          * output), where col is a 3-bit rgb-value with b in the
@@ -51,6 +53,8 @@ char *color(const char *colorstr) {
 char *endcolor(void) {
     if (output_format == O_XMOBAR)
         return "</fc>";
+    else if (output_format == O_PANGO)
+        return "</span>";
     else if (output_format == O_TERM)
         return "\033[0m";
     else
@@ -67,6 +71,8 @@ void print_separator(const char *separator) {
         printf("<fc=%s>%s</fc>", cfg_getstr(cfg_general, "color_separator"), separator);
     else if (output_format == O_LEMONBAR)
         printf("%%{F%s}%s%%{F-}", cfg_getstr(cfg_general, "color_separator"), separator);
+    else if (output_format == O_PANGO)
+        printf("<span fgcolor='%s'>%s</span>", cfg_getstr(cfg_general, "color_separator"), separator);
     else if (output_format == O_TERM)
         printf("%s%s%s", color("color_separator"), separator, endcolor());
     else if (output_format == O_NONE)

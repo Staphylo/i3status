@@ -597,6 +597,8 @@ int main(int argc, char *argv[]) {
         output_format = O_I3BAR;
     else if (strcasecmp(output_str, "lemonbar") == 0)
         output_format = O_LEMONBAR;
+    else if (strcasecmp(output_str, "pango") == 0)
+        output_format = O_PANGO;
     else if (strcasecmp(output_str, "term") == 0)
         output_format = O_TERM;
     else if (strcasecmp(output_str, "none") == 0)
@@ -674,6 +676,8 @@ int main(int argc, char *argv[]) {
         gettimeofday(&tv, NULL);
         if (output_format == O_I3BAR)
             yajl_gen_array_open(json_gen);
+        else if (output_format == O_PANGO)
+            printf("<txt>");
         else if (output_format == O_TERM)
             /* Restore the cursor-position, clear line */
             printf("\033[u\033[K");
@@ -800,6 +804,8 @@ int main(int argc, char *argv[]) {
             write(STDOUT_FILENO, buf, len);
             yajl_gen_clear(json_gen);
         }
+        else if (output_format == O_PANGO)
+            printf("</txt><tool>i3status " VERSION "</tool>");
 
         printf("\n");
         fflush(stdout);
